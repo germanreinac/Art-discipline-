@@ -1,0 +1,67 @@
+[
+ {
+  "id": "cldiu",
+  "slug": "cldiu",
+  "name": "1-on-1 Mentorship Session: Personalized Guidance for Your Creative Journey",
+  "url": "https://germanreinac.gumroad.com/l/cldiu",
+  "image": "https://public-files.gumroad.com/ek9egikhjqcaqdofpk3k8x5rwkdj",
+  "price": 150,
+  "currency": "eur",
+  "payWhatYouWant": false,
+  "rating": 0,
+  "ratings": 0,
+  "kind": "course"
+ },
+ {
+  "id": "fhsumi",
+  "slug": "portfolioreview",
+  "name": "Portfolio Review: Elevate Your Art with Expert Feedback",
+  "url": "https://germanreinac.gumroad.com/l/portfolioreview",
+  "image": "https://public-files.gumroad.com/9i8tszdpca9zqv9pdd0374296yvs",
+  "price": 80,
+  "currency": "eur",
+  "payWhatYouWant": true,
+  "rating": 5,
+  "ratings": 3,
+  "kind": "course"
+ },
+ {
+  "id": "dshyjh",
+  "slug": "artworkreview",
+  "name": "Artwork Review: Elevate Your Art with Expert Feedback / Avoid Weak Portfolio Pieces",
+  "url": "https://germanreinac.gumroad.com/l/artworkreview",
+  "image": "https://public-files.gumroad.com/xqreejtsq8sr3kxdhjcsyf439teu",
+  "price": 40,
+  "currency": "eur",
+  "payWhatYouWant": true,
+  "rating": 5,
+  "ratings": 1,
+  "kind": "course"
+ },
+ {
+  "id": "wfnftt",
+  "slug": "photoshoptools",
+  "name": "Photoshop Toolkit",
+  "url": "https://germanreinac.gumroad.com/l/photoshoptools",
+  "image": "https://public-files.gumroad.com/tbk9inu6hq6fw1ka1wbk6218ixuq",
+  "price": 0,
+  "currency": "eur",
+  "payWhatYouWant": true,
+  "rating": 4.9,
+  "ratings": 32,
+  "kind": "digital"
+ },
+ {
+  "id": "zjctrs",
+  "slug": "Characterdesign",
+  "name": "Character Design Demo - Create Characters for Videogames and Animation",
+  "url": "https://germanreinac.gumroad.com/l/Characterdesign",
+  "image": "https://public-files.gumroad.com/kqny7ix54m66u77u9eyuijdxmhqo",
+  "price": 10,
+  "currency": "eur",
+  "payWhatYouWant": true,
+  "rating": 5,
+  "ratings": 4,
+  "kind": "course"
+ }
+]
