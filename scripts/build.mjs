@@ -182,7 +182,7 @@ ${body}
 </footer>
 <div class="sticky-sub" hidden>
   <img class="sticky-flame" src="/flame.png" alt="" width="147" height="256">
-  <p class="sticky-copy"><strong>Get Art Discipline by email</strong><span>Free, once a month. For artists finding their own voice.</span></p>
+  <p class="sticky-copy"><strong>Get Art Discipline by email</strong><span>Free, once a month. Join 2,000+ artists finding their own voice.</span></p>
   ${subscribeForm("sticky-email", "Subscribe")}
   <button class="sticky-close" type="button" aria-label="Dismiss">×</button>
 </div>
