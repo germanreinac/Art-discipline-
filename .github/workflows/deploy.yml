@@ -27,9 +27,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - id: pages
+        uses: actions/configure-pages@v5
       - run: npm run sync
       - run: npm run build
-      - uses: actions/configure-pages@v5
+        env:
+          # Empty on a custom domain; "/<repo>" on the free github.io address.
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          SITE_URL: ${{ steps.pages.outputs.base_url }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
