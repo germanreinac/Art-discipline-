@@ -45,9 +45,9 @@ export default {
 
   // Other places you live. Shown on About and /links.
   links: [
-    { label: "Shop on Gumroad", url: "https://germanreinac.gumroad.com/", note: "Toolkits, demos, reviews" },
+    { label: "Shop on Gumroad", url: "https://germanreinac.gumroad.com/", note: "Free toolkit and tutorials" },
     { label: "1-on-1 mentorship", url: "https://germanreinac.gumroad.com/l/cldiu", note: "Book on Gumroad" },
-    { label: "Megalith Islands on Patreon", url: "https://www.patreon.com/MegalithIslands", note: "Comic & worldbuilding" },
+    { label: "Megalith Islands", url: "https://www.patreon.com/MegalithIslands", note: "Comic book on Patreon" },
     { label: "Artist site", url: "http://www.germanreina.com", note: "germanreina.com" },
   ],
 };
