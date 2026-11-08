@@ -208,8 +208,9 @@ await page("/", layout({
 <section class="hero wrap">
   <div class="hero-copy">
     <p class="eyebrow">A monthly newsletter by ${esc(config.author.name)}</p>
-    <h1>Stay creative,<br>stay <span class="hl">weird.</span></h1>
-    <p class="lede">A monthly letter on character design, world building and creativity from inside the game industry. By the artist behind OlliOlli World's BAFTA-nominated art, now at Supercell.</p>
+    <h1>For artists who want to <span class="hl">make games.</span></h1>
+    <p class="lede">Character design, world building and the creative grind, shared once a month by the artist behind OlliOlli World's BAFTA-nominated art, now at Supercell.</p>
+    <p class="motto">${flame()}<span>Stay creative, stay weird.</span></p>
     <div class="embed" id="subscribe">
       <iframe src="${config.substack}/embed" title="Subscribe to Art Discipline" frameborder="0" scrolling="no"></iframe>
     </div>
