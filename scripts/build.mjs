@@ -209,7 +209,7 @@ await page("/", layout({
 <section class="hero wrap">
   <div class="hero-copy">
     <p class="eyebrow">A monthly newsletter by ${esc(config.author.name)}</p>
-    <h1><span class="line">For artists who want</span><br> their <span class="nb">own voice.</span></h1>
+    <h1><span class="line">Find your voice</span><br> <span class="nb">as an artist<span class="cursor" aria-hidden="true">_</span></span></h1>
     <p class="lede">Character design, world building and careers in games, from the artist behind OlliOlli World's BAFTA-nominated art.</p>
     <p class="motto">Stay creative, stay weird.</p>
   </div>
