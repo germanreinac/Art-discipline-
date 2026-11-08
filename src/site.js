@@ -5,17 +5,25 @@
     set: (k, v) => { try { localStorage.setItem(k, v); } catch {} },
   };
 
+  const sessionGet = (k) => { try { return sessionStorage.getItem(k); } catch { return null; } };
+  const sessionSet = (k, v) => { try { sessionStorage.setItem(k, v); } catch {} };
+
   // Remember people who subscribed so we stop asking.
   document.querySelectorAll("[data-sub]").forEach((f) =>
     f.addEventListener("submit", () => store.set("ad-subscribed", "1")));
 
-  // Sticky subscribe bar: one signup on screen at a time. It shows once the
-  // reader scrolls a bit and hides while any other signup box is visible.
+  // Sticky subscribe bar: one signup on screen at a time. On the homepage it
+  // shows right away; elsewhere once the reader scrolls a bit. It hides while
+  // any other signup box is visible. Closing it hides it until the next visit.
   const bar = document.querySelector(".sticky-sub");
-  if (bar && !store.get("ad-subscribed") && !store.get("ad-bar-closed")) {
-    const others = document.querySelectorAll(".embed, .sub-card, .inline-sub, main [data-sub]");
+  const barOn = bar && !document.body.classList.contains("links-page");
+  let showBar = () => {};
+  if (bar && barOn && !store.get("ad-subscribed") && !sessionGet("ad-bar-closed")) {
+    const others = document.querySelectorAll(".sub-card, .inline-sub, main [data-sub]");
     const visible = new Set();
-    const update = () => { bar.hidden = window.scrollY < 400 || visible.size > 0; };
+    const start = document.body.classList.contains("home") ? 0 : 400;
+    let forced = false;
+    const update = () => { bar.hidden = !forced && (window.scrollY < start || visible.size > 0); };
     if ("IntersectionObserver" in window) {
       const io = new IntersectionObserver((entries) => {
         entries.forEach((e) => (e.isIntersecting ? visible.add(e.target) : visible.delete(e.target)));
@@ -23,12 +31,33 @@
       });
       others.forEach((el) => io.observe(el));
     }
-    addEventListener("scroll", update, { passive: true });
+    addEventListener("scroll", () => { forced = false; update(); }, { passive: true });
+    update();
     bar.querySelector(".sticky-close").addEventListener("click", () => {
-      store.set("ad-bar-closed", "1");
+      sessionSet("ad-bar-closed", "1");
       bar.remove();
     });
+    showBar = () => {
+      forced = true; update();
+      bar.classList.remove("nudge"); void bar.offsetWidth; bar.classList.add("nudge");
+      bar.querySelector("input").focus({ preventScroll: true });
+      return true;
+    };
   }
+
+  // Header "Subscribe": jump to this page's signup box, else open the bottom bar,
+  // else fall back to Substack's signup page.
+  document.querySelectorAll("[data-scroll-sub]").forEach((a) =>
+    a.addEventListener("click", (e) => {
+      const t = document.getElementById("subscribe");
+      if (t) {
+        e.preventDefault();
+        t.scrollIntoView({ behavior: "smooth", block: "center" });
+        t.querySelector("input")?.focus({ preventScroll: true });
+      } else if (bar && document.body.contains(bar) && showBar()) {
+        e.preventDefault();
+      }
+    }));
 
   // Share buttons inside posts.
   document.querySelectorAll("[data-share]").forEach((b) =>

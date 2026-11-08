@@ -161,6 +161,7 @@ function layout({ title, description = config.description, path, body, canonical
   <div class="wrap top-in">
     <a class="brand" href="/">${flame()}<span>Art Discipline</span></a>
     <nav>${nav.map(([h, l]) => `<a href="${h}"${path.startsWith(h) ? ' aria-current="page"' : ""}>${l}</a>`).join("")}</nav>
+    <a class="btn btn-sm" href="${subscribeUrl}" target="_blank" rel="noopener" data-scroll-sub>Subscribe</a>
   </div>
 </header>
 <main>
@@ -180,7 +181,8 @@ ${body}
   </div>
 </footer>
 <div class="sticky-sub" hidden>
-  <p><strong>Art Discipline</strong> — one email a month on art for games.</p>
+  <img class="sticky-flame" src="/flame.png" alt="" width="147" height="256">
+  <p class="sticky-copy"><strong>Get Art Discipline by email</strong><span>Free, once a month. For artists finding their own voice.</span></p>
   ${subscribeForm("sticky-email", "Subscribe")}
   <button class="sticky-close" type="button" aria-label="Dismiss">×</button>
 </div>
@@ -211,10 +213,6 @@ await page("/", layout({
     <h1>For artists who want their <span class="hl">own voice.</span></h1>
     <p class="lede">Character design, world building and growing a career in games, shared once a month by the artist behind OlliOlli World's BAFTA-nominated art, now at Supercell.</p>
     <p class="motto">${flame()}<span>Stay creative, stay weird.</span></p>
-    <div class="embed" id="subscribe">
-      <iframe src="${config.substack}/embed" title="Subscribe to Art Discipline" frameborder="0" scrolling="no"></iframe>
-    </div>
-    <p class="fine">Free. One email a month. Unsubscribe anytime.</p>
   </div>
   <div class="hero-art">${card(latest, "lg")}</div>
 </section>
