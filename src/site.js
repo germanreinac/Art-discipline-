@@ -1,16 +1,8 @@
 // Small bits of interactivity. The site works without it.
 (() => {
-  const store = {
-    get: (k) => { try { return localStorage.getItem(k); } catch { return null; } },
-    set: (k, v) => { try { localStorage.setItem(k, v); } catch {} },
-  };
 
   const sessionGet = (k) => { try { return sessionStorage.getItem(k); } catch { return null; } };
   const sessionSet = (k, v) => { try { sessionStorage.setItem(k, v); } catch {} };
-
-  // Remember people who subscribed so we stop asking.
-  document.querySelectorAll("[data-sub]").forEach((f) =>
-    f.addEventListener("submit", () => store.set("ad-subscribed", "1")));
 
   // Sticky subscribe bar: one signup on screen at a time. On the homepage it
   // shows right away; elsewhere once the reader scrolls a bit. It hides while
@@ -18,7 +10,7 @@
   const bar = document.querySelector(".sticky-sub");
   const barOn = bar && !document.body.classList.contains("links-page");
   let showBar = () => {};
-  if (bar && barOn && !store.get("ad-subscribed") && !sessionGet("ad-bar-closed")) {
+  if (bar && barOn && !sessionGet("ad-bar-closed")) {
     const others = document.querySelectorAll(".sub-card, .inline-sub, main [data-sub]");
     const visible = new Set();
     const start = document.body.classList.contains("home") ? 0 : 400;
@@ -40,7 +32,7 @@
     showBar = () => {
       forced = true; update();
       bar.classList.remove("nudge"); void bar.offsetWidth; bar.classList.add("nudge");
-      bar.querySelector("input").focus({ preventScroll: true });
+      
       return true;
     };
   }

@@ -90,13 +90,12 @@ function cleanBody(html, slug) {
 // ---------- shared pieces ----------
 const flame = (cls = "") => `<img class="flame ${cls}" src="/flame.png" alt="" width="147" height="256">`;
 
-function subscribeForm(id, label = "Subscribe") {
-  // Opens Substack's signup with the email filled in.
-  return `<form class="sub-form" action="${subscribeUrl}" method="get" target="_blank" data-sub>
-  <label class="sr" for="${id}">Email address</label>
-  <input id="${id}" type="email" name="email" placeholder="you@email.com" required autocomplete="email">
-  <button type="submit">${label}</button>
-</form>`;
+function subscribeForm(id, label = "", lazy = true) {
+  // Substack's own signup form: subscribes in one step. Cropped to the email
+  // field and Substack's terms line.
+  return `<div class="sub-embed" id="${id}" data-sub>
+  <iframe src="${config.substack}/embed" title="Subscribe to Art Discipline by email"${lazy ? ' loading="lazy"' : ""} scrolling="no"></iframe>
+</div>`;
 }
 
 function subscribeCard({ id, title, text }) {
@@ -183,7 +182,7 @@ ${body}
 <div class="sticky-sub" hidden>
   <img class="sticky-flame" src="/flame.png" alt="" width="147" height="256">
   <p class="sticky-copy"><strong>Get Art Discipline by email</strong><span>Free, once a month. Join 2,000+ artists finding their own voice.</span></p>
-  ${subscribeForm("sticky-email", "Subscribe")}
+  ${subscribeForm("sticky-email", "", false)}
   <button class="sticky-close" type="button" aria-label="Dismiss">×</button>
 </div>
 <script src="/site.js" defer></script>
