@@ -3,6 +3,12 @@ import fs from "node:fs/promises";
 import config from "../site.config.mjs";
 
 const root = new URL("../", import.meta.url);
+
+// Lets the site live in a subfolder (e.g. GitHub's free preview address).
+const BASE = (process.env.BASE_PATH || "").replace(/\/$/, "");
+if (process.env.SITE_URL) config.siteUrl = process.env.SITE_URL.replace(/\/$/, "");
+const withBase = (html) =>
+  BASE ? html.replace(/(href|src|action)="\/(?!\/)/g, `$1="${BASE}/`).replace(/url=\/(?!\/)/g, `url=${BASE}/`) : html;
 const out = new URL("dist/", root);
 const read = async (p) => JSON.parse(await fs.readFile(new URL(p, root), "utf8"));
 
@@ -188,7 +194,7 @@ ${body}
 async function page(path, html) {
   const dir = new URL("." + path, out);
   await fs.mkdir(dir, { recursive: true });
-  await fs.writeFile(new URL("index.html", dir), html);
+  await fs.writeFile(new URL("index.html", dir), withBase(html));
 }
 
 // ---------- home ----------
@@ -360,11 +366,11 @@ await page("/links/", layout({
 }));
 
 // ---------- 404 + extras ----------
-await fs.writeFile(new URL("404.html", out), layout({
+await fs.writeFile(new URL("404.html", out), withBase(layout({
   title: "Not found",
   path: "/404",
   body: `<section class="wrap-narrow page-head center">${flame("links-flame")}<h1>Lost?</h1><p class="lede">This page doesn't exist. <a href="/archive/">Browse every issue</a> instead.</p></section>`,
-}));
+})));
 await fs.writeFile(new URL("robots.txt", out), `User-agent: *\nAllow: /\nSitemap: ${config.siteUrl}/sitemap.xml\n`);
 const urls = ["/", "/archive/", "/shop/", "/about/", "/links/", ...posts.map(postUrl)];
 await fs.writeFile(new URL("sitemap.xml", out),

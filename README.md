@@ -29,11 +29,15 @@ Subscribing always goes to Substack, so your list stays there.
 
 Everything editable is in `site.config.mjs`: tagline, "Start here" picks, which product to suggest at the end of each post, archive topics and links. Styles are in `src/styles.css`.
 
-## Going live on artdiscipline.com
+## Preview address (no domain changes)
 
-1. In GitHub: **Settings → Pages → Source: GitHub Actions**, then merge to `main`.
-2. In Substack: **Settings → Domain**, move the publication off `artdiscipline.com`, either back to `artdiscipline.substack.com` or to a subdomain like `read.artdiscipline.com`.
-3. At your domain registrar, point `artdiscipline.com` to GitHub Pages and add it under **Settings → Pages → Custom domain**.
-4. In `site.config.mjs`, set `canonicalToSubstack: false` and set `substack` to the new Substack address.
+In GitHub, go to **Settings → Pages** and set **Source** to **GitHub Actions**. The site then publishes to
+**https://germanreinac.github.io/Art-discipline-/**, and Substack keeps artdiscipline.com untouched.
+
+## Going live on artdiscipline.com (last step)
+
+1. In Substack, go to **Settings → Domain** and move the publication off `artdiscipline.com`, either back to `artdiscipline.substack.com` or to a subdomain like `read.artdiscipline.com`.
+2. At your domain registrar, point `artdiscipline.com` to GitHub Pages, and enter it under **Settings → Pages → Custom domain**. The build adjusts its links automatically.
+3. In `site.config.mjs`, set `canonicalToSubstack: false` and set `substack` to the new Substack address.
 
 Old links such as `artdiscipline.com/p/art-discipline-12` keep working, because posts live at the same paths.
