@@ -6,9 +6,9 @@ A branded home for the **Art Discipline** newsletter. You keep writing on Substa
 
 1. `npm run sync` downloads every post from Substack and every product from Gumroad into `data/`.
 2. `npm run build` turns that into a static site in `dist/`.
-3. A GitHub Action runs both every day, and on every push to `main`, then publishes to GitHub Pages.
+3. A GitHub Action runs both every hour, and on every push to `main`, then publishes to GitHub Pages. When new posts arrive, it saves them in `data/`, which also keeps a backup of every issue.
 
-**Publishing a new issue takes no extra work.** Post on Substack as usual and it shows up here within a day. For an instant update, open the repo's **Actions** tab, pick **Build and deploy site** and press **Run workflow**.
+**Publishing a new issue takes no extra work.** Post on Substack as usual and it shows up here within an hour. For an instant update, open the repo's **Actions** tab, pick **Build and deploy site** and press **Run workflow**.
 
 No dependencies: just Node 22.
 
