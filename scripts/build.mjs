@@ -161,7 +161,6 @@ function layout({ title, description = config.description, path, body, canonical
   <div class="wrap top-in">
     <a class="brand" href="/">${flame()}<span>Art Discipline</span></a>
     <nav>${nav.map(([h, l]) => `<a href="${h}"${path.startsWith(h) ? ' aria-current="page"' : ""}>${l}</a>`).join("")}</nav>
-    <a class="btn btn-sm" href="/#subscribe" data-scroll-sub>Subscribe</a>
   </div>
 </header>
 <main>
@@ -209,8 +208,8 @@ await page("/", layout({
 <section class="hero wrap">
   <div class="hero-copy">
     <p class="eyebrow">A monthly newsletter by ${esc(config.author.name)}</p>
-    <h1>Learn art for the game industry.<br><span class="hl">Stay creative, stay weird.</span></h1>
-    <p class="lede">Character design, world building and creativity, from the artist behind OlliOlli World's BAFTA-nominated art, now at Supercell. ${issues.length} issues and counting.</p>
+    <h1>Stay creative,<br>stay <span class="hl">weird.</span></h1>
+    <p class="lede">A monthly letter on character design, world building and creativity from inside the game industry. By the artist behind OlliOlli World's BAFTA-nominated art, now at Supercell.</p>
     <div class="embed" id="subscribe">
       <iframe src="${config.substack}/embed" title="Subscribe to Art Discipline" frameborder="0" scrolling="no"></iframe>
     </div>
@@ -247,7 +246,6 @@ ${gift ? `<section class="wrap section">
   <div><h2>Hi, I'm ${esc(config.author.name.split(" ")[0])}.</h2><p>${esc(config.author.bio)}</p><a class="more" href="/about/">More about me →</a></div>
 </section>
 
-<div class="wrap">${subscribeCard({ id: "subscribe-end", title: "Get the next issue in your inbox", text: "Join the artists learning how games get their look, one honest issue at a time." })}</div>
 `,
 }));
 
@@ -337,7 +335,7 @@ await page("/about/", layout({
   <p class="eyebrow">About</p>
   <h1>${esc(config.author.name)}</h1>
   <p class="lede">${esc(config.author.bio)}</p>
-  <p>Art Discipline is my independently-run newsletter. Once a month I share what I'm learning about character design, world building, careers in games and staying creative, plus the projects I'm building on the side, like Colorpoop and Megalith Islands.</p>
+  <p>Art Discipline is my independently-run newsletter. Once a month I share what I'm learning about character design, world building, careers in games and staying creative, plus the side projects I'm building, like Megalith Islands.</p>
 </section>
 <section class="wrap-narrow">
   <ul class="link-list">${config.links.map((l) => `<li><a href="${l.url}" target="_blank" rel="noopener"><strong>${esc(l.label)}</strong><span>${esc(l.note)}</span></a></li>`).join("")}</ul>

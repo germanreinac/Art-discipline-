@@ -46,10 +46,8 @@ export default {
   // Other places you live. Shown on About and /links.
   links: [
     { label: "Shop on Gumroad", url: "https://germanreinac.gumroad.com/", note: "Toolkits, demos, reviews" },
-    { label: "1-on-1 mentorship", url: "https://www.trojan-unicorn.com/village/spaces/102-guidance-sessions/mentorships/offers/779-concept-art-3-sessions", note: "Via Trojan Unicorn" },
+    { label: "1-on-1 mentorship", url: "https://germanreinac.gumroad.com/l/cldiu", note: "Book on Gumroad" },
     { label: "Megalith Islands on Patreon", url: "https://www.patreon.com/MegalithIslands", note: "Comic & worldbuilding" },
-    { label: "Instagram", url: "https://www.instagram.com/germanreinac/", note: "@germanreinac" },
-    { label: "Colorpoop", url: "https://www.instagram.com/_colorpoop/", note: "@_colorpoop" },
-    { label: "Portfolio", url: "http://www.germanreina.com", note: "germanreina.com" },
+    { label: "Artist site", url: "http://www.germanreina.com", note: "germanreina.com" },
   ],
 };
