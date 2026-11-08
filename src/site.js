@@ -9,29 +9,26 @@
   document.querySelectorAll("[data-sub]").forEach((f) =>
     f.addEventListener("submit", () => store.set("ad-subscribed", "1")));
 
-  // Sticky subscribe bar: shows after scrolling a bit, unless dismissed or subscribed.
+  // Sticky subscribe bar: one signup on screen at a time. It shows once the
+  // reader scrolls a bit and hides while any other signup box is visible.
   const bar = document.querySelector(".sticky-sub");
   if (bar && !store.get("ad-subscribed") && !store.get("ad-bar-closed")) {
-    const onScroll = () => {
-      const y = window.scrollY / (document.body.scrollHeight - innerHeight || 1);
-      bar.hidden = !(y > 0.25 && y < 0.92);
-    };
-    addEventListener("scroll", onScroll, { passive: true });
+    const others = document.querySelectorAll(".embed, .sub-card, .inline-sub, main [data-sub]");
+    const visible = new Set();
+    const update = () => { bar.hidden = window.scrollY < 400 || visible.size > 0; };
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => (e.isIntersecting ? visible.add(e.target) : visible.delete(e.target)));
+        update();
+      });
+      others.forEach((el) => io.observe(el));
+    }
+    addEventListener("scroll", update, { passive: true });
     bar.querySelector(".sticky-close").addEventListener("click", () => {
       store.set("ad-bar-closed", "1");
       bar.remove();
     });
   }
-
-  // Header "Subscribe" scrolls to the nearest signup on the page.
-  document.querySelectorAll("[data-scroll-sub]").forEach((a) =>
-    a.addEventListener("click", (e) => {
-      const t = document.getElementById("subscribe");
-      if (!t) return;
-      e.preventDefault();
-      t.scrollIntoView({ behavior: "smooth", block: "center" });
-      t.querySelector("input")?.focus({ preventScroll: true });
-    }));
 
   // Share buttons inside posts.
   document.querySelectorAll("[data-share]").forEach((b) =>

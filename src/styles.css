@@ -40,7 +40,7 @@ p { margin: 0 0 1em; }
 .meta { display: flex; gap: 12px; flex-wrap: wrap; }
 .lede { font-size: 1.15rem; color: var(--ink-2); max-width: 46ch; }
 .fine { font-size: 13px; color: var(--ink-3); }
-.hl { background: linear-gradient(transparent 55%, var(--lav) 55%); }
+.hl { background: linear-gradient(transparent 55%, var(--lav) 55%, var(--lav) 88%, transparent 88%); padding: 0 .1em; margin: 0 -.1em; }
 .more { font: 700 14px var(--mono); text-decoration: none; border-bottom: 2px solid var(--ink); white-space: nowrap; }
 .more:hover { background: var(--lav); }
 
@@ -71,7 +71,7 @@ p { margin: 0 0 1em; }
 
 /* hero */
 .hero { display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; padding-top: 56px; padding-bottom: 40px; }
-.hero h1 { margin-bottom: .4em; }
+.hero h1 { font-size: clamp(2.4rem, 5.4vw, 4rem); margin-bottom: .35em; }
 .embed { background: var(--card); border: 2px solid var(--ink); border-radius: var(--r); box-shadow: var(--shadow); overflow: hidden; max-width: 480px; margin: 24px 0 10px; }
 .embed iframe { display: block; width: 100%; height: 150px; border: 0; background: var(--card); }
 
@@ -207,6 +207,7 @@ p { margin: 0 0 1em; }
 .sticky-sub .sub-form { flex: 0 1 360px; flex-wrap: nowrap; }
 .sticky-sub .sub-form input { padding: 8px 14px; border-color: #fff; font-size: 15px; }
 .sticky-sub .sub-form button { background: var(--lav); color: var(--ink); border-color: var(--lav); padding: 8px 16px; font-size: 13px; }
+.sticky-sub[hidden] { display: none; }
 .sticky-close { background: none; border: 0; color: #aaa; font-size: 22px; cursor: pointer; padding: 0 10px; }
 
 @media (max-width: 900px) {
@@ -219,7 +220,7 @@ p { margin: 0 0 1em; }
 }
 @media (max-width: 600px) {
   body { font-size: 16px; }
-  .wrap, .wrap-narrow { padding: 0 16px; }
+  .wrap, .wrap-narrow { padding-left: 16px; padding-right: 16px; }
   .top-in { gap: 8px; height: 56px; }
   .brand span { display: none; }
   .top nav a { padding: 6px 8px; font-size: 13px; }
