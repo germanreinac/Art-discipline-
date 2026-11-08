@@ -10,9 +10,9 @@ export default {
   substack: "https://artdiscipline.substack.com",
   gumroad: "https://germanreinac.gumroad.com",
 
-  // While Substack still owns artdiscipline.com, point search engines to the
-  // Substack copy of each post. Set to false once this site takes over the domain.
-  canonicalToSubstack: true,
+  // true: tell search engines the Substack copy of each post is the original.
+  // false: this site (artdiscipline.com) is the main home of the posts.
+  canonicalToSubstack: false,
 
   author: {
     name: "Germán Reina Carmona",
