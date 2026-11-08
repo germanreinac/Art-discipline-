@@ -34,10 +34,20 @@ Everything editable is in `site.config.mjs`: tagline, "Start here" picks, which 
 In GitHub, go to **Settings → Pages** and set **Source** to **GitHub Actions**. The site then publishes to
 **https://germanreinac.github.io/Art-discipline-/**, and Substack keeps artdiscipline.com untouched.
 
-## Going live on artdiscipline.com (last step)
+## artdiscipline.com
 
-1. In Substack, go to **Settings → Domain** and move the publication off `artdiscipline.com`, either back to `artdiscipline.substack.com` or to a subdomain like `read.artdiscipline.com`.
-2. At your domain registrar, point `artdiscipline.com` to GitHub Pages, and enter it under **Settings → Pages → Custom domain**. The build adjusts its links automatically.
-3. In `site.config.mjs`, set `canonicalToSubstack: false` and set `substack` to the new Substack address.
+The domain points straight at GitHub Pages. Substack stays at `artdiscipline.substack.com`, and every signup form subscribes people there.
 
-Old links such as `artdiscipline.com/p/art-discipline-12` keep working, because posts live at the same paths.
+DNS records at the domain registrar:
+
+| Type | Name | Value |
+| --- | --- | --- |
+| A | @ | 185.199.108.153 |
+| A | @ | 185.199.109.153 |
+| A | @ | 185.199.110.153 |
+| A | @ | 185.199.111.153 |
+| CNAME | www | germanreinac.github.io |
+
+GitHub: **Settings → Pages → Custom domain** is `artdiscipline.com`, with **Enforce HTTPS** on. The build picks up the domain by itself.
+
+Old links such as `artdiscipline.com/p/art-discipline-12` keep working, because posts live at the same paths as on Substack.
