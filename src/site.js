@@ -51,6 +51,18 @@
       }
     }));
 
+  // Homepage: end the intro paragraph where the headline's last line ends.
+  const nb = document.querySelector(".hero h1 .nb");
+  if (nb) {
+    const fit = () => {
+      const copy = nb.closest(".hero-copy");
+      copy.style.setProperty("--dot-w", nb.getBoundingClientRect().right - copy.getBoundingClientRect().left + "px");
+    };
+    fit();
+    addEventListener("resize", fit);
+    document.fonts?.ready.then(fit);
+  }
+
   // Share buttons inside posts.
   document.querySelectorAll("[data-share]").forEach((b) =>
     b.addEventListener("click", async () => {
