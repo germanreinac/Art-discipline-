@@ -15,7 +15,7 @@ export default {
   canonicalToSubstack: true,
 
   author: {
-    name: "Germán Reina",
+    name: "Germán Reina Carmona",
     bio: "Creative vision and art direction for video games and animation. Previously OlliOlli World (BAFTA-nominated art), Supercell, Rovio, Riot Games. Passionate about unique designs and world-building for new and existing IPs.",
   },
 

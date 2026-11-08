@@ -65,6 +65,8 @@ function cleanBody(html, slug) {
   let n = 0;
   const inline = () => `<div class="inline-sub"><p>Enjoying it? Get every issue by email.</p>${subscribeForm(`in-${slug}-${n++}`, "Subscribe")}</div>`;
   return html
+    // full name everywhere
+    .replace(/Germán Reina(?! Carmona)/g, config.author.name)
     .replace(/<div class="image-link-expand">[\s\S]*?<\/svg><\/button><\/div><\/div>/g, "")
     .replace(/<button[\s\S]*?<\/button>/g, "")
     // Substack's signed image links refuse other sites; use plain CDN resizes instead
