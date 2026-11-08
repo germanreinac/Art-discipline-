@@ -51,6 +51,18 @@
       }
     }));
 
+  // Substack signup boxes: shift the crop on narrow widths (Substack's layout
+  // moves up below 340px), and open the box to show Substack's terms line
+  // as soon as someone clicks into it.
+  const embeds = document.querySelectorAll(".sub-embed");
+  const sizeEmbeds = () => embeds.forEach((el) => el.classList.toggle("narrow", el.offsetWidth + 24 < 340));
+  sizeEmbeds();
+  addEventListener("resize", sizeEmbeds);
+  addEventListener("blur", () => setTimeout(() => {
+    const box = document.activeElement?.closest?.(".sub-embed");
+    if (box) box.classList.add("open");
+  }));
+
   // Homepage: end the intro paragraph where the headline's last line ends.
   const nb = document.querySelector(".hero h1 .nb");
   if (nb) {
