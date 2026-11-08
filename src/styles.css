@@ -202,7 +202,8 @@ p { margin: 0 0 1em; }
 .link-list a { display: flex; justify-content: space-between; gap: 12px; align-items: center; background: var(--card); border: 2px solid var(--ink); border-radius: 999px; padding: 14px 22px; text-decoration: none; transition: transform .12s, box-shadow .12s; }
 .link-list a:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow); background: var(--lav); }
 .link-list strong { font: 700 15px var(--mono); }
-.link-list span { font-size: 13px; color: var(--ink-3); text-align: right; }
+.link-list strong { text-align: left; }
+.link-list span { font-size: 13px; color: var(--ink-3); text-align: right; margin-left: auto; }
 .links { text-align: center; padding-top: 48px; padding-bottom: 48px; }
 .links .sub-embed { margin: 24px auto 8px; }
 .links-flame { width: 72px; margin: 0 auto 16px; }

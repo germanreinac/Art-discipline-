@@ -175,7 +175,7 @@ ${body}
       <p>${esc(config.tagline)}</p>
     </div>
     <div class="foot-links">
-      <a href="/archive/">Read</a><a href="/shop/">Shop</a><a href="/about/">About</a><a href="/links/">Links</a>
+      <a href="/archive/">Read</a><a href="/shop/">Shop</a><a href="/about/">About</a>
       <a href="${config.substack}" target="_blank" rel="noopener">Substack</a>
     </div>
     <p class="fine">© ${new Date().getFullYear()} ${esc(config.author.name)}</p>
