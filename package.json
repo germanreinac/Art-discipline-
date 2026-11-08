@@ -1,0 +1,12 @@
+{
+  "name": "artdiscipline-site",
+  "private": true,
+  "type": "module",
+  "description": "artdiscipline.com: a branded home for the Art Discipline newsletter, built from Substack and Gumroad.",
+  "scripts": {
+    "sync": "node scripts/sync.mjs",
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/build.mjs && python3 -m http.server 4321 -d dist"
+  },
+  "engines": { "node": ">=22" }
+}
