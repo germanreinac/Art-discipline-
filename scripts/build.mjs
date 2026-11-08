@@ -174,15 +174,15 @@ ${body}
       <p>${esc(config.tagline)}</p>
     </div>
     <div class="foot-links">
-      <a href="/archive/">All issues</a><a href="/shop/">Shop</a><a href="/about/">About</a><a href="/links/">Links</a>
-      <a href="${config.substack}" target="_blank" rel="noopener">Substack</a><a href="${config.substack}/feed">RSS</a>
+      <a href="/archive/">Read</a><a href="/shop/">Shop</a><a href="/about/">About</a><a href="/links/">Links</a>
+      <a href="${config.substack}" target="_blank" rel="noopener">Substack</a>
     </div>
     <p class="fine">© ${new Date().getFullYear()} ${esc(config.author.name)}</p>
   </div>
 </footer>
 <div class="sticky-sub" hidden>
   <img class="sticky-flame" src="/flame.png" alt="" width="147" height="256">
-  <p class="sticky-copy"><strong>Get Art Discipline by email</strong><span>Free, once a month. For artists finding their own voice.</span></p>
+  <p class="sticky-copy"><strong>Get Art Discipline by email</strong><span>Free, once a month. Join 2,000+ artists finding their own voice.</span></p>
   ${subscribeForm("sticky-email", "Subscribe")}
   <button class="sticky-close" type="button" aria-label="Dismiss">×</button>
 </div>
@@ -210,7 +210,7 @@ await page("/", layout({
 <section class="hero wrap">
   <div class="hero-copy">
     <p class="eyebrow">A monthly newsletter by ${esc(config.author.name)}</p>
-    <h1><span class="line">For artists who want</span><br> their <span class="hl">own voice.</span></h1>
+    <h1><span class="line">For artists who want</span><br> their <span class="nb">own voice.</span></h1>
     <p class="lede">Character design, world building and growing a career in games, shared once a month by the artist behind OlliOlli World's BAFTA-nominated art, now at Supercell.</p>
     <p class="motto">${flame()}<span>Stay creative, stay weird.</span></p>
   </div>
