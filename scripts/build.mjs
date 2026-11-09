@@ -90,7 +90,7 @@ function cleanBody(html, slug) {
 }
 
 // ---------- shared pieces ----------
-const mark = `Art Discipline<sup class="reg">®</sup>`;
+const mark = `Art Discipline<span class="reg" role="img" aria-label="registered trademark">R</span>`;
 const flame = (cls = "") => `<img class="flame ${cls}" src="/flame.png" alt="" width="147" height="256">`;
 
 function subscribeForm(id, label = "", lazy = true) {
@@ -217,7 +217,7 @@ const org = {
   url: config.siteUrl + "/",
   logo: config.siteUrl + "/logo.png",
   founder: { "@type": "Person", name: config.author.name },
-  sameAs: [config.substack, config.gumroad, ...config.links.map((l) => l.url).filter((u) => !u.includes("/l/"))],
+  sameAs: [config.substack, config.gumroad, config.instagram, ...config.links.map((l) => l.url).filter((u) => !u.includes("/l/"))],
 };
 const siteSchema = {
   "@context": "https://schema.org",
@@ -237,14 +237,13 @@ const postSchema = (p) => ({
   publisher: org,
 });
 
-// Profile picture on a gradient, linking to the artist site
+// Profile picture on a gradient, linking to Instagram
 function avatar(size, cls = "") {
   const photo = posts[0].authorPhoto;
   if (!photo) return "";
-  const site = config.links.find((l) => /artist site/i.test(l.label));
   const pic = `<img src="${img(photo, size)}" alt="${esc(config.author.name)}">`;
-  return site
-    ? `<a class="avatar ${cls}" href="${site.url}" target="_blank" rel="noopener" title="${esc(config.author.name)}'s artist site">${pic}</a>`
+  return config.instagram
+    ? `<a class="avatar ${cls}" href="${config.instagram}" target="_blank" rel="noopener" title="${esc(config.author.name)} on Instagram">${pic}</a>`
     : `<span class="avatar ${cls}">${pic}</span>`;
 }
 
