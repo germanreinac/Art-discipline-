@@ -162,7 +162,7 @@ function layout({ title, description = config.description, path, body, canonical
   <div class="wrap top-in">
     <a class="brand" href="/">${flame()}<span>Art Discipline</span></a>
     <nav>${nav.map(([h, l]) => `<a href="${h}"${path.startsWith(h) ? ' aria-current="page"' : ""}>${l}</a>`).join("")}</nav>
-    <a class="btn btn-sm" href="${subscribeUrl}" target="_blank" rel="noopener" data-scroll-sub>Subscribe</a>
+    <a class="btn btn-sm" href="${subscribeUrl}" target="_blank" rel="noopener">Subscribe</a>
   </div>
 </header>
 <main>
