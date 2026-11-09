@@ -369,7 +369,7 @@ await page("/shop/", layout({
   body: `
 <section class="wrap page-head">
   <p class="eyebrow">Shop</p>
-  <h1>Improve your creative skills</h1>
+  <h1>Improve your creative skills<span class="cursor" aria-hidden="true">_</span></h1>
   <p class="lede">Toolkits, tutorials and 1-on-1 feedback, all through Gumroad.</p>
 </section>
 <section class="wrap">
