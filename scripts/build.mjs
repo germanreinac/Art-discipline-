@@ -181,8 +181,8 @@ ${body}
 <footer class="foot">
   <div class="wrap foot-in">
     <div>
-      <a class="brand" href="/">${flame()}<span>${mark}</span></a>
-      <p>${esc(config.tagline)}</p>
+      <a class="brand" href="/"><span>${mark}</span></a>
+      <p class="foot-motto">${esc(config.tagline)}</p>
     </div>
     <div class="foot-links">
       <a href="/archive/">Read</a><a href="/shop/">Shop</a><a href="/about/">About</a>
@@ -237,6 +237,31 @@ const postSchema = (p) => ({
   publisher: org,
 });
 
+// Profile picture on a gradient, linking to the artist site
+function avatar(size, cls = "") {
+  const photo = posts[0].authorPhoto;
+  if (!photo) return "";
+  const site = config.links.find((l) => /artist site/i.test(l.label));
+  const pic = `<img src="${img(photo, size)}" alt="${esc(config.author.name)}">`;
+  return site
+    ? `<a class="avatar ${cls}" href="${site.url}" target="_blank" rel="noopener" title="${esc(config.author.name)}'s artist site">${pic}</a>`
+    : `<span class="avatar ${cls}">${pic}</span>`;
+}
+
+// Highlighted free product (homepage and top of the shop)
+function giftBlock(gift, shopLink) {
+  return `<div class="gift">
+    <div class="gift-img"><img src="${gift.image}" alt="" loading="lazy"></div>
+    <div>
+      <p class="eyebrow">Free download</p>
+      <h2>${esc(gift.name)}</h2>
+      <p>The brushes and tools I use every day. ${gift.ratings} artists rated it ${gift.rating.toFixed(1)}★. Pay what you want, or nothing at all.</p>
+      <a class="btn" href="${gift.url}" target="_blank" rel="noopener" data-gumroad>Get it free</a>
+      ${shopLink ? `<a class="more" href="/shop/">See the shop →</a>` : ""}
+    </div>
+  </div>`;
+}
+
 // ---------- home ----------
 const latest = posts[0];
 const gift = product(config.freebie);
@@ -263,24 +288,13 @@ await page("/", layout({
 
 <section class="wrap section">
   <div class="section-head"><h2>Latest issues</h2><a class="more" href="/archive/">All ${issues.length} issues →</a></div>
-  <div class="grid">${posts.slice(1, 7).map((p) => card(p)).join("")}</div>
+  <div class="grid grid-4">${posts.slice(1, 9).map((p) => card(p)).join("")}</div>
 </section>
 
-${gift ? `<section class="wrap section">
-  <div class="gift">
-    <div class="gift-img"><img src="${gift.image}" alt="" loading="lazy"></div>
-    <div>
-      <p class="eyebrow">Free download</p>
-      <h2>${esc(gift.name)}</h2>
-      <p>The brushes and tools I use every day. ${gift.ratings} artists rated it ${gift.rating.toFixed(1)}★. Pay what you want, or nothing at all.</p>
-      <a class="btn" href="${gift.url}" target="_blank" rel="noopener" data-gumroad>Get it free</a>
-      <a class="more" href="/shop/">See the shop →</a>
-    </div>
-  </div>
-</section>` : ""}
+${gift ? `<section class="wrap section">${giftBlock(gift, true)}</section>` : ""}
 
 <section class="wrap section about-strip">
-  ${posts[0].authorPhoto ? `<img class="avatar" src="${img(posts[0].authorPhoto, 240)}" alt="${esc(config.author.name)}">` : ""}
+  ${avatar(240)}
   <div><h2>Hi, I'm ${esc(config.author.name.split(" ")[0])}.</h2><p>${esc(config.author.bio)}</p><a class="more" href="/about/">More about me →</a></div>
 </section>
 
@@ -348,18 +362,20 @@ for (let i = 0; i < posts.length; i++) {
 }
 
 // ---------- shop ----------
-const sorted = [...products].sort((a, b) => (a.slug === config.freebie ? -1 : b.slug === config.freebie ? 1 : a.price - b.price));
+const shopGift = product(config.freebie);
+const others = products.filter((p) => p !== shopGift).sort((a, b) => a.price - b.price);
 await page("/shop/", layout({
   title: "Shop",
   path: "/shop/",
   body: `
 <section class="wrap page-head">
   <p class="eyebrow">Shop</p>
-  <h1>Tools, demos and feedback</h1>
-  <p class="lede">Everything is sold through Gumroad. Checkout opens right here.</p>
+  <h1>Improve your creative skills</h1>
+  <p class="lede">Toolkits, tutorials and 1-on-1 feedback, all through Gumroad.</p>
 </section>
 <section class="wrap">
-  <div class="grid products">${sorted.map((p) => productCard(p, p.slug === config.freebie)).join("")}</div>
+  ${shopGift ? giftBlock(shopGift, false) : ""}
+  <div class="grid grid-4 products shop-grid">${others.map((p) => productCard(p)).join("")}</div>
   <p class="fine center"><a href="${config.gumroad}" target="_blank" rel="noopener">Visit the full Gumroad store →</a></p>
 </section>
 <div class="wrap">${subscribeCard({ id: "subscribe", title: "New products land in the newsletter first", text: "Subscribers hear about new toolkits, demos and mentorship spots before anyone else." })}</div>
@@ -372,7 +388,7 @@ await page("/about/", layout({
   path: "/about/",
   body: `
 <section class="wrap-narrow page-head about">
-  ${posts[0].authorPhoto ? `<img class="avatar lg" src="${img(posts[0].authorPhoto, 320)}" alt="${esc(config.author.name)}">` : ""}
+  ${avatar(320, "lg")}
   <p class="eyebrow">About</p>
   <h1>${esc(config.author.name)}</h1>
   <p class="lede">${esc(config.author.bio)}</p>
