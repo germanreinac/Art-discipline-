@@ -90,6 +90,7 @@ function cleanBody(html, slug) {
 }
 
 // ---------- shared pieces ----------
+const mark = `Art Discipline<sup class="reg">®</sup>`;
 const flame = (cls = "") => `<img class="flame ${cls}" src="/flame.png" alt="" width="147" height="256">`;
 
 function subscribeForm(id, label = "", lazy = true) {
@@ -135,8 +136,9 @@ function productCard(p, feature = false) {
 </a>`;
 }
 
-function layout({ title, description = config.description, path, body, canonical, image, bodyClass = "" }) {
-  const full = title ? `${title} · ${config.title}` : `${config.title} by ${config.author.name}`;
+function layout({ title, description = config.description, path, body, canonical, image, bodyClass = "", type = "website", published, schema }) {
+  const full = title ? `${title} · ${config.title}` : `${config.title}: ${config.headline} | Newsletter by ${config.author.name}`;
+  const url = canonical || config.siteUrl + path;
   const nav = [["/archive/", "Read"], ["/shop/", "Shop"], ["/about/", "About"]];
   return `<!doctype html>
 <html lang="en">
@@ -145,12 +147,20 @@ function layout({ title, description = config.description, path, body, canonical
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(full)}</title>
 <meta name="description" content="${esc(description)}">
-<link rel="canonical" href="${canonical || config.siteUrl + path}">
-<meta property="og:title" content="${esc(full)}">
+<link rel="canonical" href="${url}">
+<meta property="og:site_name" content="${config.title}">
+<meta property="og:type" content="${type}">
+<meta property="og:url" content="${url}">
+<meta property="og:title" content="${esc(full)}">${published ? `\n<meta property="article:published_time" content="${published}">` : ""}
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:image" content="${image || config.siteUrl + "/logo.png"}">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="/favicon.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#e4e4e2">
+<script type="application/ld+json">${JSON.stringify(schema || siteSchema)}</script>
+<script>document.documentElement.classList.add("js")</script>
 <link rel="alternate" type="application/rss+xml" title="${config.title}" href="${config.substack}/feed">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -160,7 +170,7 @@ function layout({ title, description = config.description, path, body, canonical
 <body class="${bodyClass}">
 <header class="top">
   <div class="wrap top-in">
-    <a class="brand" href="/">${flame()}<span>Art Discipline</span></a>
+    <a class="brand" href="/">${flame()}<span>${mark}</span></a>
     <nav>${nav.map(([h, l]) => `<a href="${h}"${path.startsWith(h) ? ' aria-current="page"' : ""}>${l}</a>`).join("")}</nav>
     <a class="btn btn-sm" href="${subscribeUrl}" target="_blank" rel="noopener">Subscribe</a>
   </div>
@@ -171,7 +181,7 @@ ${body}
 <footer class="foot">
   <div class="wrap foot-in">
     <div>
-      <a class="brand" href="/">${flame()}<span>Art Discipline</span></a>
+      <a class="brand" href="/">${flame()}<span>${mark}</span></a>
       <p>${esc(config.tagline)}</p>
     </div>
     <div class="foot-links">
@@ -183,7 +193,7 @@ ${body}
 </footer>
 <div class="sticky-sub" hidden>
   <img class="sticky-flame" src="/flame.png" alt="" width="147" height="256">
-  <p class="sticky-copy"><strong>Get Art Discipline by email</strong><span>Free, once a month. Join 2,000+ artists finding their own voice.</span></p>
+  <p class="sticky-copy"><strong>Get ${mark} by email</strong><span>Free, once a month. Join 2,000+ artists finding their own voice.</span></p>
   ${subscribeForm("sticky-email", "", false)}
   <button class="sticky-close" type="button" aria-label="Dismiss">×</button>
 </div>
@@ -199,6 +209,34 @@ async function page(path, html) {
   await fs.writeFile(new URL("index.html", dir), withBase(html));
 }
 
+// ---------- structured data (helps Google show the brand) ----------
+const org = {
+  "@type": "Organization",
+  "@id": config.siteUrl + "/#org",
+  name: config.title,
+  url: config.siteUrl + "/",
+  logo: config.siteUrl + "/logo.png",
+  founder: { "@type": "Person", name: config.author.name },
+  sameAs: [config.substack, config.gumroad, ...config.links.map((l) => l.url).filter((u) => !u.includes("/l/"))],
+};
+const siteSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    org,
+    { "@type": "WebSite", "@id": config.siteUrl + "/#site", name: config.title, alternateName: "Art Discipline newsletter", url: config.siteUrl + "/", publisher: { "@id": org["@id"] } },
+  ],
+};
+const postSchema = (p) => ({
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: headline(p),
+  datePublished: p.date,
+  image: img(p.cover, 1200),
+  url: config.siteUrl + postUrl(p),
+  author: { "@type": "Person", name: config.author.name },
+  publisher: org,
+});
+
 // ---------- home ----------
 const latest = posts[0];
 const gift = product(config.freebie);
@@ -210,12 +248,12 @@ await page("/", layout({
   body: `
 <section class="hero wrap">
   <div class="hero-copy">
-    <p class="eyebrow">A monthly newsletter by ${esc(config.author.name)}</p>
-    <h1><span class="line">Find your voice</span><br> <span class="nb">as an artist<span class="cursor" aria-hidden="true">_</span></span></h1>
-    <p class="lede">Character design, world building and careers in games, from the artist behind OlliOlli World's BAFTA-nominated art.</p>
-    <p class="motto">Stay creative, stay weird.</p>
+    <p class="eyebrow enter" style="--i:0">A monthly newsletter by ${esc(config.author.name)}</p>
+    <h1 class="enter" style="--i:1"><span class="line">${config.headline.replace(" as an artist", "")}</span><br> <span class="nb">as an artist<span class="cursor" aria-hidden="true">_</span></span></h1>
+    <p class="lede enter" style="--i:2">Character design, world building and careers in games, from the artist behind OlliOlli World's BAFTA-nominated art.</p>
+    <p class="motto enter" style="--i:3">Stay creative, stay weird.</p>
   </div>
-  <div class="hero-art">${card(latest, "lg")}</div>
+  <div class="hero-art enter" style="--i:2">${card(latest, "lg")}</div>
 </section>
 
 <section class="wrap section">
@@ -281,6 +319,9 @@ for (let i = 0; i < posts.length; i++) {
     path: postUrl(p),
     canonical: config.canonicalToSubstack ? p.url : undefined,
     image: img(p.cover, 1200),
+    type: "article",
+    published: p.date,
+    schema: postSchema(p),
     bodyClass: "post-page",
     body: `
 <article class="post">
@@ -352,7 +393,7 @@ await page("/links/", layout({
   body: `
 <section class="wrap-narrow links">
   ${flame("links-flame")}
-  <h1>Art Discipline</h1>
+  <h1>${mark}</h1>
   <p>${esc(config.tagline)}</p>
   ${subscribeForm("links-email", "Subscribe to the newsletter")}
   <ul class="link-list">
@@ -372,7 +413,7 @@ await fs.writeFile(new URL("404.html", out), withBase(layout({
 await fs.writeFile(new URL("robots.txt", out), `User-agent: *\nAllow: /\nSitemap: ${config.siteUrl}/sitemap.xml\n`);
 const urls = ["/", "/archive/", "/shop/", "/about/", "/links/", ...posts.map(postUrl)];
 await fs.writeFile(new URL("sitemap.xml", out),
-  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((u) => `<url><loc>${config.siteUrl}${u}</loc></url>`).join("")}</urlset>\n`);
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((u) => { const p = posts.find((x) => postUrl(x) === u); return `<url><loc>${config.siteUrl}${u}</loc>${p ? `<lastmod>${p.updated.slice(0, 10)}</lastmod>` : ""}</url>`; }).join("")}</urlset>\n`);
 // Substack-style /subscribe link keeps working
 await page("/subscribe/", `<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=/#subscribe"><link rel="canonical" href="${config.siteUrl}/#subscribe">`);
 if (process.env.CNAME) await fs.writeFile(new URL("CNAME", out), process.env.CNAME + "\n");

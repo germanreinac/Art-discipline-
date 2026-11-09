@@ -32,11 +32,11 @@
   // Homepage: sections rise into view as you scroll. Items in a row come in
   // one after another. With reduced motion it is a plain fade (see styles.css).
   if (document.body.classList.contains("home") && "IntersectionObserver" in window) {
-    const groups = [".hero-copy > *", ".hero-art", ".section-head", ".start li", ".grid > *", ".gift", ".about-strip"];
+    const groups = [".section-head", ".start li", ".grid > *", ".gift", ".about-strip"];
     const items = [];
     groups.forEach((sel) => document.querySelectorAll(sel).forEach((el, i) => {
       el.classList.add("reveal");
-      el.style.setProperty("--delay", `${(i % 4) * 90}ms`);
+      el.style.setProperty("--delay", `${(i % 4) * 120}ms`);
       items.push(el);
     }));
     const io = new IntersectionObserver((entries) => entries.forEach((e) => {
@@ -47,7 +47,8 @@
       // hand hover effects back to the element's own transitions
       el.addEventListener("transitionend", () => el.classList.remove("reveal", "in"), { once: true });
     }), { rootMargin: "0px 0px -8% 0px" });
-    items.forEach((el) => io.observe(el));
+    // wait for the hidden state to be painted, so items already on screen animate too
+    requestAnimationFrame(() => requestAnimationFrame(() => items.forEach((el) => io.observe(el))));
   }
 
   // Substack signup boxes: shift the crop on narrow widths (Substack's layout
@@ -72,6 +73,7 @@
     fit();
     addEventListener("resize", fit);
     document.fonts?.ready.then(fit);
+    nb.closest("h1").addEventListener("animationend", fit); // measure again once it stops moving
   }
 
   // Share buttons inside posts.
