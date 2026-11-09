@@ -2,8 +2,9 @@
 export default {
   title: "Art Discipline",
   tagline: "Stay creative, stay weird.",
+  headline: "Find your voice as an artist",
   description:
-    "A monthly newsletter to learn about art in the game industry from the artist behind OlliOlli World, currently at Supercell. Character design, world building and creativity.",
+    "Art Discipline is a monthly newsletter by Germán Reina Carmona, the artist behind OlliOlli World's BAFTA-nominated art: character design, world building, creativity and careers in games.",
   siteUrl: "https://artdiscipline.com",
 
   // Where the posts come from. The site rebuilds from this automatically.
