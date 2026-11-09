@@ -44,6 +44,8 @@ export default {
     { name: "Process", tags: ["process", "drawing", "learning", "book summary"] },
   ],
 
+  instagram: "https://www.instagram.com/germanreinac/",
+
   // Other places you live. Shown on About and /links.
   links: [
     { label: "Shop on Gumroad", url: "https://germanreinac.gumroad.com/", note: "Free toolkit and tutorials" },
