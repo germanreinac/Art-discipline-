@@ -235,9 +235,7 @@ body.home .foot { padding-bottom: 220px; }
 .sticky-copy strong { font: 700 16px/1.25 var(--mono); color: var(--lav); }
 .sticky-copy span { font-size: 13.5px; color: #cfcfcc; }
 .sticky-sub .sub-embed { flex: 0 1 370px; }
-.sticky-sub.nudge { animation: nudge .5s ease; }
 @keyframes bar-in { from { opacity: 0; transform: translate(-50%, 30px); } }
-@keyframes nudge { 30% { transform: translate(-50%, -8px); } 60% { transform: translate(-50%, 2px); } }
 @keyframes flicker { 0%, 100% { transform: rotate(-3deg) scaleY(1); } 50% { transform: rotate(3deg) scaleY(1.05); } }
 .sticky-close { position: absolute; top: -12px; right: -10px; width: 28px; height: 28px; border-radius: 50%; background: #fff; color: var(--ink); border: 2px solid var(--ink); font-size: 16px; line-height: 1; cursor: pointer; padding: 0; }
 
@@ -278,6 +276,10 @@ body.home .foot { padding-bottom: 220px; }
   .sticky-sub .sub-embed { flex: 1 1 100%; max-width: none; margin-left: -66px; }
   .link-list a { border-radius: var(--r); }
 }
+/* scroll-in animation (homepage, added by site.js) */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease var(--delay, 0ms), transform .7s cubic-bezier(.2, .8, .2, 1) var(--delay, 0ms); }
+.reveal.in { opacity: 1; transform: none; }
+
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 }
