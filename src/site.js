@@ -6,11 +6,11 @@
 
   // Sticky subscribe bar: one signup on screen at a time. On the homepage it
   // shows right away; elsewhere once the reader scrolls a bit. It hides while
-  // any other signup box is visible. Closing it hides it until the next visit.
+  // any other signup box, or the footer, is visible. Closing it hides it until the next visit.
   const bar = document.querySelector(".sticky-sub");
   const barOn = bar && !document.body.classList.contains("links-page");
   if (bar && barOn && !sessionGet("ad-bar-closed")) {
-    const others = document.querySelectorAll(".sub-card, .inline-sub, main [data-sub]");
+    const others = document.querySelectorAll(".sub-card, .inline-sub, main [data-sub], .foot");
     const visible = new Set();
     const start = document.body.classList.contains("home") ? 0 : 400;
     const update = () => { bar.hidden = window.scrollY < start || visible.size > 0; };
@@ -30,9 +30,8 @@
   }
 
   // Homepage: sections rise into view as you scroll. Items in a row come in
-  // one after another. Skipped when the reader prefers reduced motion.
-  if (document.body.classList.contains("home") && "IntersectionObserver" in window &&
-      !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  // one after another. With reduced motion it is a plain fade (see styles.css).
+  if (document.body.classList.contains("home") && "IntersectionObserver" in window) {
     const groups = [".hero-copy > *", ".hero-art", ".section-head", ".start li", ".grid > *", ".gift", ".about-strip"];
     const items = [];
     groups.forEach((sel) => document.querySelectorAll(sel).forEach((el, i) => {
