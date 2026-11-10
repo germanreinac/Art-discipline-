@@ -51,6 +51,20 @@
     requestAnimationFrame(() => requestAnimationFrame(() => items.forEach((el) => io.observe(el))));
   }
 
+  // Heavy third-party bits wait until the page has loaded and gone quiet,
+  // so they don't slow down the first view: the bottom bar's Substack form
+  // and Gumroad's checkout script (only on pages that sell something).
+  const whenIdle = (fn) => addEventListener("load", () =>
+    ("requestIdleCallback" in window ? requestIdleCallback(fn, { timeout: 2500 }) : setTimeout(fn, 1200)));
+  whenIdle(() => {
+    document.querySelectorAll("iframe[data-src]").forEach((f) => { f.src = f.dataset.src; });
+    if (document.querySelector("[data-gumroad]")) {
+      const s = document.createElement("script");
+      s.src = "https://gumroad.com/js/gumroad.js";
+      document.body.append(s);
+    }
+  });
+
   // Substack signup boxes: shift the crop on narrow widths (Substack's layout
   // moves up below 340px), and open the box to show Substack's terms line
   // as soon as someone clicks into it.

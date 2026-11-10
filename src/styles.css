@@ -1,4 +1,13 @@
 /* Art Discipline: grey paper, black ink, lavender flame. */
+
+/* Fonts are served from this site (OFL licensed, see /fonts) so nothing blocks the first paint. */
+@font-face { font-family: "Space Mono"; font-style: normal; font-weight: 400; font-display: swap; src: url(/fonts/space-mono-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family: "Space Mono"; font-style: italic; font-weight: 400; font-display: swap; src: url(/fonts/space-mono-latin-400-italic.woff2) format("woff2"); }
+@font-face { font-family: "Space Mono"; font-style: normal; font-weight: 700; font-display: swap; src: url(/fonts/space-mono-latin-700-normal.woff2) format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 400; font-display: swap; src: url(/fonts/inter-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 500; font-display: swap; src: url(/fonts/inter-latin-500-normal.woff2) format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 600; font-display: swap; src: url(/fonts/inter-latin-600-normal.woff2) format("woff2"); }
+
 :root {
   --paper: #e4e4e2;
   --paper-2: #ededeb;
@@ -301,11 +310,11 @@ a.avatar:hover img { transform: scale(1.06); }
 .sticky-copy .reg { font-size: .36em; top: .1em; }
 
 /* homepage entrance: header drops in, hero pieces rise into place one by one */
-@keyframes rise { from { opacity: 0; transform: translateY(64px) scale(.95); } }
+@keyframes rise { from { opacity: .01; transform: translateY(64px) scale(.95); } }
 @keyframes drop { from { opacity: 0; transform: translateY(-100%); } }
-@keyframes fade { from { opacity: 0; } }
+@keyframes fade { from { opacity: .01; } }
 .js .home .top { animation: drop .7s cubic-bezier(.2, .8, .2, 1) both; }
-.js .enter { animation: rise 1s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(150ms + var(--i, 0) * 140ms); }
+.js .enter { animation: rise .85s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(60ms + var(--i, 0) * 110ms); }
 
 /* scroll-in animation (homepage, added by site.js) */
 .reveal { opacity: 0; transform: translateY(64px) scale(.95); transition: opacity .9s ease var(--delay, 0ms), transform 1s cubic-bezier(.2, .8, .2, 1) var(--delay, 0ms); }
