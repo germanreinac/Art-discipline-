@@ -71,10 +71,9 @@ p { margin: 0 0 1em; }
 /* Substack's embedded form, cropped to the email field and terms line */
 /* Substack's embedded form, cropped to just its email row. It opens up to show
    Substack's terms line once someone clicks into it (see site.js). */
-.sub-embed { position: relative; width: 100%; max-width: 370px; height: 40px; border-radius: 8px; overflow: hidden; background: #f5f5f5; transition: height .25s ease; }
-.sub-embed iframe { position: absolute; left: -12px; top: -25px; width: calc(100% + 24px); height: 150px; border: 0; }
-.sub-embed.narrow iframe { top: -17px; }
-.sub-embed.open { height: 96px; }
+.sub-embed { position: relative; width: 100%; max-width: 420px; height: 72px; border-radius: 12px; overflow: hidden; background: #f5f5f5; transition: height .25s ease; }
+.sub-embed iframe { position: absolute; left: 0; top: -8px; width: 100%; height: 160px; border: 0; }
+.sub-embed.open { height: 122px; }
 
 /* header */
 .top { position: sticky; top: 0; z-index: 20; background: rgba(228,228,226,.9); backdrop-filter: blur(8px); border-bottom: 2px solid var(--ink); }
@@ -256,7 +255,7 @@ a.avatar:hover img { transform: scale(1.06); }
 .sticky-copy { margin: 0; flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 .sticky-copy strong { font: 700 16px/1.25 var(--mono); color: var(--lav); }
 .sticky-copy span { font-size: 13.5px; color: #cfcfcc; }
-.sticky-sub .sub-embed { flex: 0 1 370px; }
+.sticky-sub .sub-embed { flex: 0 1 420px; }
 @keyframes bar-in { from { opacity: 0; transform: translate(-50%, 30px); } }
 @keyframes flicker { 0%, 100% { transform: rotate(-3deg) scaleY(1); } 50% { transform: rotate(3deg) scaleY(1.05); } }
 .sticky-close { position: absolute; top: -12px; right: -10px; width: 28px; height: 28px; border-radius: 50%; background: #fff; color: var(--ink); border: 2px solid var(--ink); font-size: 16px; line-height: 1; cursor: pointer; padding: 0; }
@@ -291,7 +290,7 @@ a.avatar:hover img { transform: scale(1.06); }
   .post-product .product-img { width: 96px; }
   .sticky-sub { flex-wrap: wrap; gap: 10px; padding: 12px 12px 12px 78px; bottom: 10px; border-radius: 18px; }
   .sticky-flame { height: 52px; left: 18px; top: 10px; }
-  .sub-embed.open { height: 100px; }
+  .sub-embed.open { height: 124px; }
   .sticky-copy { flex: 1 1 100%; min-height: 44px; justify-content: center; }
   .sticky-copy strong { font-size: 14px; }
   .sticky-copy span { font-size: 12.5px; }
