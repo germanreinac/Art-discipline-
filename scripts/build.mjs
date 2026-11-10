@@ -39,6 +39,19 @@ function img(url, w) {
 const date = (d) => new Date(d).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 const issueNo = (p) => (p.title.match(/\.(\d+)/) || [])[1] || null;
 const headline = (p) => (issueNo(p) && p.subtitle ? p.subtitle : p.title);
+const issueLabel = (p) => (issueNo(p) ? `${config.title} .${issueNo(p)}` : config.title);
+// Search-result description: the opening of the post as plain text, cut at a word.
+function describe(p) {
+  const text = (p.body || "").replace(/<figcaption[\s\S]*?<\/figcaption>/g, " ").replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&#39;|&rsquo;/g, "'").replace(/&quot;/g, '"').replace(/&[a-z#0-9]+;/g, " ")
+    .replace(/\s+/g, " ")
+    // many issues open with the same publication blurb or sign-up line; skip those
+    .replace(/^\s*Art Discipline is a monthly[^.]*\.\s*(Dive into[^.]*\.)?\s*((Stay creative, )?Stay weird\.?)?/i, " ")
+    .replace(/Thanks for reading Art Discipline[^!.]*[!.]\s*(Subscribe for free[^.]*\.)?/gi, " ")
+    .replace(/\s+/g, " ").trim() || p.excerpt || config.description;
+  if (text.length <= 158) return text;
+  return text.slice(0, 158).replace(/\s+\S*$/, "").replace(/[,;:.\s]+$/, "") + "…";
+}
 const kicker = (p) => (issueNo(p) ? `Issue .${issueNo(p)}` : "Note");
 const postUrl = (p) => `/p/${p.slug}/`;
 const subscribeUrl = `${config.substack}/subscribe`;
@@ -61,7 +74,7 @@ function topicsOf(post) {
 }
 
 // Clean Substack's HTML so it fits our layout.
-function cleanBody(html, slug) {
+function cleanBody(html, slug, label = "") {
   let n = 0;
   const inline = () => `<div class="inline-sub"><p>Enjoying it? Get every issue by email.</p>${subscribeForm(`in-${slug}-${n++}`, "Subscribe")}</div>`;
   return html
@@ -72,7 +85,7 @@ function cleanBody(html, slug) {
     // Substack's signed image links refuse other sites; use plain CDN resizes instead
     .replace(/<picture>[\s\S]*?<img ([^>]*?)src="([^"]+)"([^>]*)>[\s\S]*?<\/picture>/g, (m, a, src, b) => {
       const w = (m.match(/width="(\d+)"/) || [])[1], h = (m.match(/height="(\d+)"/) || [])[1];
-      const alt = (m.match(/alt="([^"]*)"/) || [])[1] || "";
+      const alt = (m.match(/alt="([^"]*)"/) || [])[1] || esc(label);
       return `<img src="${img(src, 1456)}" srcset="${img(src, 720)} 720w, ${img(src, 1456)} 1456w" sizes="(max-width: 800px) 100vw, 800px"${w ? ` width="${w}" height="${h}"` : ""} alt="${alt}">`;
     })
     .replace(/(<a class="image-link[^"]*"[^>]*href=")([^"]+)"/g, (m, pre, href) => `${pre}${img(href, 2400)}"`)
@@ -118,8 +131,8 @@ function subscribeCard({ id, title, text }) {
 function card(p, size = "") {
   return `<a class="card ${size}" href="${postUrl(p)}">
   <div class="card-img">${size === "lg"
-    ? `<img src="${img(p.cover, 900)}" srcset="${img(p.cover, 480)} 480w, ${img(p.cover, 700)} 700w, ${img(p.cover, 900)} 900w, ${img(p.cover, 1320)} 1320w" sizes="(max-width: 900px) 100vw, 660px" alt="" fetchpriority="high" decoding="async">`
-    : `<img src="${img(p.cover, 600)}" alt="" loading="lazy" decoding="async">`}</div>
+    ? `<img src="${img(p.cover, 900)}" srcset="${img(p.cover, 480)} 480w, ${img(p.cover, 700)} 700w, ${img(p.cover, 900)} 900w, ${img(p.cover, 1320)} 1320w" sizes="(max-width: 900px) 100vw, 660px" alt="${esc(`Cover art for ${issueLabel(p)}: ${headline(p)}`)}" fetchpriority="high" decoding="async">`
+    : `<img src="${img(p.cover, 600)}" alt="${esc(`Cover art for ${issueLabel(p)}: ${headline(p)}`)}" loading="lazy" decoding="async">`}</div>
   <div class="card-body">
     <p class="meta"><span>${kicker(p)}</span><span>${date(p.date)}</span></p>
     <h3>${esc(headline(p))}</h3>
@@ -130,7 +143,7 @@ function card(p, size = "") {
 
 function productCard(p, feature = false) {
   return `<a class="product ${feature ? "feature" : ""}" href="${p.url}" target="_blank" rel="noopener" data-gumroad>
-  <div class="product-img"><img src="${p.image}" alt="" loading="lazy" decoding="async"></div>
+  <div class="product-img"><img src="${p.image}" alt="${esc(p.name)}" loading="lazy" decoding="async"></div>
   <div class="product-body">
     <h3>${esc(p.name)}</h3>
     <p class="meta"><span class="price">${money(p)}</span>${p.ratings ? `<span>★ ${p.rating.toFixed(1)} · ${p.ratings} ratings</span>` : ""}</p>
@@ -138,8 +151,8 @@ function productCard(p, feature = false) {
 </a>`;
 }
 
-function layout({ title, description = config.description, path, body, canonical, image, bodyClass = "", type = "website", published, schema }) {
-  const full = title ? `${title} · ${config.title}` : `${config.title}: ${config.headline} | Newsletter by ${config.author.name}`;
+function layout({ title, description = config.description, path, body, canonical, image, bodyClass = "", type = "website", published, modified, schema, noindex = false }) {
+  const full = title ? (title.includes(config.title) ? title : `${title} · ${config.title}`) : `${config.title}: ${config.headline} | ${config.author.name}`;
   const url = canonical || config.siteUrl + path;
   const nav = [["/archive/", "Read"], ["/shop/", "Shop"], ["/about/", "About"]];
   return `<!doctype html>
@@ -149,14 +162,19 @@ function layout({ title, description = config.description, path, body, canonical
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(full)}</title>
 <meta name="description" content="${esc(description)}">
+<meta name="robots" content="${noindex ? "noindex, follow" : "index, follow, max-image-preview:large, max-snippet:-1"}">
+<meta name="author" content="${esc(config.author.name)}">
 <link rel="canonical" href="${url}">
 <meta property="og:site_name" content="${config.title}">
 <meta property="og:type" content="${type}">
 <meta property="og:url" content="${url}">
 <meta property="og:title" content="${esc(full)}">${published ? `\n<meta property="article:published_time" content="${published}">` : ""}
 <meta property="og:description" content="${esc(description)}">
-<meta property="og:image" content="${image || config.siteUrl + "/logo.png"}">
+<meta property="og:image" content="${image || shareImage}">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${esc(full)}">
+<meta name="twitter:description" content="${esc(description)}">
+<meta name="twitter:image" content="${image || shareImage}">${modified ? `\n<meta property="article:modified_time" content="${modified}">` : ""}
 <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -211,13 +229,15 @@ async function page(path, html) {
 }
 
 // ---------- structured data (helps Google show the brand) ----------
+const shareImage = img(posts[0].cover, 1200); // latest cover, shown when the site is shared
 const org = {
   "@type": "Organization",
   "@id": config.siteUrl + "/#org",
   name: config.title,
   url: config.siteUrl + "/",
   logo: config.siteUrl + "/logo.png",
-  founder: { "@type": "Person", name: config.author.name },
+  founder: { "@type": "Person", "@id": config.siteUrl + "/about/#person", name: config.author.name },
+  description: config.description,
   sameAs: [config.substack, config.gumroad, config.instagram, ...config.links.map((l) => l.url).filter((u) => !u.includes("/l/"))],
 };
 const siteSchema = {
@@ -227,16 +247,41 @@ const siteSchema = {
     { "@type": "WebSite", "@id": config.siteUrl + "/#site", name: config.title, alternateName: "Art Discipline newsletter", url: config.siteUrl + "/", publisher: { "@id": org["@id"] } },
   ],
 };
+const person = {
+  "@type": "Person",
+  "@id": config.siteUrl + "/about/#person",
+  name: config.author.name,
+  url: config.siteUrl + "/about/",
+  description: config.author.bio,
+  jobTitle: "Art director and character designer",
+  sameAs: [config.instagram, config.gumroad, ...config.links.map((l) => l.url).filter((u) => !u.includes("/l/"))],
+};
+const crumbs = (...items) => ({
+  "@type": "BreadcrumbList",
+  itemListElement: items.map(([name, path], i) => ({ "@type": "ListItem", position: i + 1, name, item: config.siteUrl + path })),
+});
 const postSchema = (p) => ({
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  headline: headline(p),
-  datePublished: p.date,
-  image: img(p.cover, 1200),
-  url: config.siteUrl + postUrl(p),
-  author: { "@type": "Person", name: config.author.name },
-  publisher: org,
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      headline: headline(p),
+      alternativeHeadline: issueLabel(p),
+      description: describe(p),
+      datePublished: p.date,
+      dateModified: p.updated || p.date,
+      image: [img(p.cover, 1200)],
+      url: config.siteUrl + postUrl(p),
+      mainEntityOfPage: config.siteUrl + postUrl(p),
+      keywords: p.tags.join(", "),
+      isPartOf: { "@id": config.siteUrl + "/#site" },
+      author: person,
+      publisher: org,
+    },
+    crumbs(["Art Discipline", "/"], ["Read", "/archive/"], [headline(p), postUrl(p)]),
+  ],
 });
+const pageSchema = (extra, ...trail) => ({ "@context": "https://schema.org", "@graph": [org, ...extra, crumbs(["Art Discipline", "/"], ...trail)] });
 
 // Profile picture on a gradient, linking to Instagram
 function avatar(size, cls = "") {
@@ -251,7 +296,7 @@ function avatar(size, cls = "") {
 // Highlighted free product (homepage and top of the shop)
 function giftBlock(gift, shopLink) {
   return `<div class="gift">
-    <div class="gift-img"><img src="${gift.image}" alt="" loading="lazy"></div>
+    <div class="gift-img"><img src="${gift.image}" alt="${esc(gift.name)}" loading="lazy"></div>
     <div>
       <p class="eyebrow">Free download</p>
       <h2>${esc(gift.name)}</h2>
@@ -304,7 +349,9 @@ ${gift ? `<section class="wrap section">${giftBlock(gift, true)}</section>` : ""
 // ---------- archive ----------
 const allTopics = config.topics.filter((t) => posts.some((p) => topicsOf(p).includes(t.name)));
 await page("/archive/", layout({
-  title: "All issues",
+  title: "All issues of the Art Discipline newsletter",
+  description: `All ${issues.length} issues of Art Discipline, the monthly newsletter by ${config.author.name}: character design, world building, creative process and careers in the game industry.`,
+  schema: pageSchema([{ "@type": "CollectionPage", name: "Art Discipline archive", url: config.siteUrl + "/archive/", hasPart: issues.slice(0, 50).map((p) => ({ "@type": "BlogPosting", headline: headline(p), url: config.siteUrl + postUrl(p), datePublished: p.date })) }], ["Read", "/archive/"]),
   path: "/archive/",
   body: `
 <section class="wrap page-head">
@@ -328,8 +375,9 @@ for (let i = 0; i < posts.length; i++) {
   const newer = posts[i - 1], older = posts[i + 1];
   const prod = productFor(p);
   await page(postUrl(p), layout({
-    title: headline(p),
-    description: p.excerpt.slice(0, 160) || config.description,
+    title: issueNo(p) ? `${headline(p)} · ${issueLabel(p)}` : headline(p),
+    description: describe(p),
+    modified: p.updated || p.date,
     path: postUrl(p),
     canonical: config.canonicalToSubstack ? p.url : undefined,
     image: img(p.cover, 1200),
@@ -347,7 +395,7 @@ for (let i = 0; i < posts.length; i++) {
       <span>${esc(config.author.name)}</span>
     </div>
   </header>
-  <div class="prose wrap-narrow">${cleanBody(p.body, p.slug)}</div>
+  <div class="prose wrap-narrow">${cleanBody(p.body, p.slug, `Artwork from ${issueLabel(p)}: ${headline(p)}`)}</div>
   <div class="wrap-narrow post-end">
     <a class="discuss" href="${p.url}" target="_blank" rel="noopener">♥ ${p.reactions} · Comment on Substack →</a>
     ${subscribeCard({ id: "subscribe", title: "Enjoyed this? Get the next one.", text: "Art Discipline lands once a month. Free, honest, a little weird." })}
@@ -365,7 +413,9 @@ for (let i = 0; i < posts.length; i++) {
 const shopGift = product(config.freebie);
 const others = products.filter((p) => p !== shopGift).sort((a, b) => a.price - b.price);
 await page("/shop/", layout({
-  title: "Shop",
+  title: "Shop: free Photoshop toolkit, tutorials, mentorship",
+  description: `Improve your creative skills with ${config.author.name}: a free Photoshop toolkit, a character design tutorial, portfolio and artwork reviews, and 1-on-1 mentorship.`,
+  schema: pageSchema([{ "@type": "ItemList", name: "Art Discipline shop", itemListElement: products.map((p, i) => ({ "@type": "ListItem", position: i + 1, name: p.name, url: p.url })) }], ["Shop", "/shop/"]),
   path: "/shop/",
   body: `
 <section class="wrap page-head">
@@ -384,7 +434,9 @@ await page("/shop/", layout({
 
 // ---------- about ----------
 await page("/about/", layout({
-  title: "About",
+  title: `About ${config.author.name}, the artist behind Art Discipline`,
+  description: `${config.author.name} is an art director and character designer: OlliOlli World (BAFTA-nominated art), Supercell, Rovio and Riot Games. Art Discipline is his monthly newsletter.`,
+  schema: pageSchema([{ "@type": "ProfilePage", url: config.siteUrl + "/about/", mainEntity: person }], ["About", "/about/"]),
   path: "/about/",
   body: `
 <section class="wrap-narrow page-head about">
@@ -404,6 +456,7 @@ await page("/about/", layout({
 // ---------- link-in-bio ----------
 await page("/links/", layout({
   title: "Links",
+  noindex: true,
   path: "/links/",
   bodyClass: "links-page",
   body: `
@@ -423,11 +476,12 @@ await page("/links/", layout({
 // ---------- 404 + extras ----------
 await fs.writeFile(new URL("404.html", out), withBase(layout({
   title: "Not found",
+  noindex: true,
   path: "/404",
   body: `<section class="wrap-narrow page-head center">${flame("links-flame")}<h1>Lost?</h1><p class="lede">This page doesn't exist. <a href="/archive/">Browse every issue</a> instead.</p></section>`,
 })));
 await fs.writeFile(new URL("robots.txt", out), `User-agent: *\nAllow: /\nSitemap: ${config.siteUrl}/sitemap.xml\n`);
-const urls = ["/", "/archive/", "/shop/", "/about/", "/links/", ...posts.map(postUrl)];
+const urls = ["/", "/archive/", "/shop/", "/about/", ...posts.map(postUrl)];
 await fs.writeFile(new URL("sitemap.xml", out),
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((u) => { const p = posts.find((x) => postUrl(x) === u); return `<url><loc>${config.siteUrl}${u}</loc>${p ? `<lastmod>${p.updated.slice(0, 10)}</lastmod>` : ""}</url>`; }).join("")}</urlset>\n`);
 // Substack-style /subscribe link keeps working
