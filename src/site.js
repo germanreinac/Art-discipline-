@@ -71,13 +71,8 @@
     }
   });
 
-  // Substack signup boxes: shift the crop on narrow widths (Substack's layout
-  // moves up below 340px), and open the box to show Substack's terms line
-  // as soon as someone clicks into it.
-  const embeds = document.querySelectorAll(".sub-embed");
-  const sizeEmbeds = () => embeds.forEach((el) => el.classList.toggle("narrow", el.offsetWidth + 24 < 340));
-  sizeEmbeds();
-  addEventListener("resize", sizeEmbeds);
+  // Substack signup boxes open up to show Substack's terms line as soon as
+  // someone clicks into them.
   addEventListener("blur", () => setTimeout(() => {
     const box = document.activeElement?.closest?.(".sub-embed");
     if (box) box.classList.add("open");
