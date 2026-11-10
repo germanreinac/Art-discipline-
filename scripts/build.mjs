@@ -97,7 +97,7 @@ function subscribeForm(id, label = "", lazy = true) {
   // Substack's own signup form: subscribes in one step. Cropped to the email
   // field and Substack's terms line.
   return `<div class="sub-embed" id="${id}" data-sub>
-  <iframe src="${config.substack}/embed" title="Subscribe to Art Discipline by email"${lazy ? ' loading="lazy"' : ""} scrolling="no"></iframe>
+  <iframe ${lazy ? `src="${config.substack}/embed" loading="lazy"` : `data-src="${config.substack}/embed"`} title="Subscribe to Art Discipline by email" scrolling="no"></iframe>
 </div>`;
 }
 
@@ -117,7 +117,9 @@ function subscribeCard({ id, title, text }) {
 
 function card(p, size = "") {
   return `<a class="card ${size}" href="${postUrl(p)}">
-  <div class="card-img"><img src="${img(p.cover, size === "lg" ? 1100 : 600)}" alt="" loading="lazy" decoding="async"></div>
+  <div class="card-img">${size === "lg"
+    ? `<img src="${img(p.cover, 900)}" srcset="${img(p.cover, 480)} 480w, ${img(p.cover, 700)} 700w, ${img(p.cover, 900)} 900w, ${img(p.cover, 1320)} 1320w" sizes="(max-width: 900px) 100vw, 660px" alt="" fetchpriority="high" decoding="async">`
+    : `<img src="${img(p.cover, 600)}" alt="" loading="lazy" decoding="async">`}</div>
   <div class="card-body">
     <p class="meta"><span>${kicker(p)}</span><span>${date(p.date)}</span></p>
     <h3>${esc(headline(p))}</h3>
@@ -162,9 +164,9 @@ function layout({ title, description = config.description, path, body, canonical
 <script type="application/ld+json">${JSON.stringify(schema || siteSchema)}</script>
 <script>document.documentElement.classList.add("js")</script>
 <link rel="alternate" type="application/rss+xml" title="${config.title}" href="${config.substack}/feed">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://substackcdn.com">
+<link rel="preload" href="/fonts/space-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/styles.css">
 </head>
 <body class="${bodyClass}">
@@ -198,7 +200,6 @@ ${body}
   <button class="sticky-close" type="button" aria-label="Dismiss">×</button>
 </div>
 <script src="/site.js" defer></script>
-<script src="https://gumroad.com/js/gumroad.js" defer></script>
 </body>
 </html>`;
 }
