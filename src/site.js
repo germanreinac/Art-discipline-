@@ -4,8 +4,9 @@
   const sessionGet = (k) => { try { return sessionStorage.getItem(k); } catch { return null; } };
   const sessionSet = (k, v) => { try { sessionStorage.setItem(k, v); } catch {} };
 
-  // Sticky subscribe bar: one signup on screen at a time. On the homepage it
-  // shows right away; elsewhere once the reader scrolls a bit. It hides while
+  // Sticky subscribe bar: one signup on screen at a time. It waits 4 seconds
+  // after the page opens (its Substack form loads then too, keeping the first
+  // load light); on pages other than home it also waits for a bit of scrolling. It hides while
   // any other signup box, or the footer, is visible. Closing it hides it until the next visit.
   const bar = document.querySelector(".sticky-sub");
   const barOn = bar && !document.body.classList.contains("links-page");
@@ -13,7 +14,14 @@
     const others = document.querySelectorAll(".sub-card, .inline-sub, main [data-sub], .foot");
     const visible = new Set();
     const start = document.body.classList.contains("home") ? 0 : 400;
-    const update = () => { bar.hidden = window.scrollY < start || visible.size > 0; };
+    let ready = false;
+    const update = () => { bar.hidden = !ready || window.scrollY < start || visible.size > 0; };
+    setTimeout(() => {
+      ready = true;
+      const f = bar.querySelector("iframe[data-src]");
+      if (f) f.src = f.dataset.src;
+      update();
+    }, 4000);
     if ("IntersectionObserver" in window) {
       const io = new IntersectionObserver((entries) => {
         entries.forEach((e) => (e.isIntersecting ? visible.add(e.target) : visible.delete(e.target)));
@@ -51,13 +59,11 @@
     requestAnimationFrame(() => requestAnimationFrame(() => items.forEach((el) => io.observe(el))));
   }
 
-  // Heavy third-party bits wait until the page has loaded and gone quiet,
-  // so they don't slow down the first view: the bottom bar's Substack form
-  // and Gumroad's checkout script (only on pages that sell something).
+  // Gumroad's checkout script waits until the page has loaded and gone quiet,
+  // and only loads on pages that sell something.
   const whenIdle = (fn) => addEventListener("load", () =>
     ("requestIdleCallback" in window ? requestIdleCallback(fn, { timeout: 2500 }) : setTimeout(fn, 1200)));
   whenIdle(() => {
-    document.querySelectorAll("iframe[data-src]").forEach((f) => { f.src = f.dataset.src; });
     if (document.querySelector("[data-gumroad]")) {
       const s = document.createElement("script");
       s.src = "https://gumroad.com/js/gumroad.js";
