@@ -4,24 +4,29 @@
   const sessionGet = (k) => { try { return sessionStorage.getItem(k); } catch { return null; } };
   const sessionSet = (k, v) => { try { sessionStorage.setItem(k, v); } catch {} };
 
-  // Sticky subscribe bar: one signup on screen at a time. It waits 4 seconds
-  // after the page opens (its Substack form loads then too, keeping the first
-  // load light); on pages other than home it also waits for a bit of scrolling. It hides while
-  // any other signup box, or the footer, is visible. Closing it hides it until the next visit.
+  // Sticky subscribe bar: one signup on screen at a time. On the homepage it
+  // appears once the visitor starts scrolling; on other pages, as soon as the
+  // page has loaded. Its Substack form only loads at that moment, keeping the
+  // first load light. It hides while any other signup box, or the footer, is
+  // visible. Closing it hides it until the next visit.
   const bar = document.querySelector(".sticky-sub");
   const barOn = bar && !document.body.classList.contains("links-page");
   if (bar && barOn && !sessionGet("ad-bar-closed")) {
     const others = document.querySelectorAll(".sub-card, .inline-sub, main [data-sub], .foot");
     const visible = new Set();
-    const start = document.body.classList.contains("home") ? 0 : 400;
+    const home = document.body.classList.contains("home");
     let ready = false;
-    const update = () => { bar.hidden = !ready || window.scrollY < start || visible.size > 0; };
-    setTimeout(() => {
+    const update = () => {
+      if (!ready && home && window.scrollY > 60) start();
+      bar.hidden = !ready || visible.size > 0;
+    };
+    const start = () => {
       ready = true;
       const f = bar.querySelector("iframe[data-src]");
       if (f) f.src = f.dataset.src;
       update();
-    }, 4000);
+    };
+    if (!home) (document.readyState === "complete" ? start() : addEventListener("load", start));
     if ("IntersectionObserver" in window) {
       const io = new IntersectionObserver((entries) => {
         entries.forEach((e) => (e.isIntersecting ? visible.add(e.target) : visible.delete(e.target)));
