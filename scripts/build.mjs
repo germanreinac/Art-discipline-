@@ -307,6 +307,8 @@ function giftBlock(gift, shopLink) {
   </div>`;
 }
 
+const mentorship = config.links.find((l) => /mentorship/i.test(l.label));
+
 // ---------- home ----------
 const latest = posts[0];
 const gift = product(config.freebie);
@@ -322,6 +324,10 @@ await page("/", layout({
     <h1 class="enter" style="--i:1"><span class="line">${config.headline.replace(" as an artist", "")}</span><br> <span class="nb">as an artist<span class="cursor" aria-hidden="true">_</span></span></h1>
     <p class="lede enter" style="--i:2">Character design, world building and careers in games, from the artist behind OlliOlli World's BAFTA-nominated art.</p>
     <p class="motto enter" style="--i:3">Stay creative, stay weird.</p>
+    <p class="hero-cta enter" style="--i:4">
+      <a class="btn" href="${subscribeUrl}" target="_blank" rel="noopener">Subscribe free</a>
+      ${mentorship ? `<a class="btn btn-ghost" href="${mentorship.url}" target="_blank" rel="noopener" data-gumroad>1-on-1 mentorship →</a>` : ""}
+    </p>
   </div>
   <div class="hero-art enter" style="--i:2">${card(latest, "lg")}</div>
 </section>
