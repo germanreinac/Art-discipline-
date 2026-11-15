@@ -342,7 +342,7 @@ await page("/", layout({
 ${gift ? `<section class="wrap section">${giftBlock(gift, true)}</section>` : ""}
 
 <section class="wrap section about-strip">
-  ${avatar(240)}
+  ${avatar(480)}
   <div><h2>Hi, I'm ${esc(config.author.name.split(" ")[0])}.</h2><p>${esc(config.author.bio)}</p><a class="more" href="/about/">More about me →</a></div>
 </section>
 
@@ -443,7 +443,7 @@ await page("/about/", layout({
   path: "/about/",
   body: `
 <section class="wrap-narrow page-head about">
-  ${avatar(320, "lg")}
+  ${avatar(640, "lg")}
   <p class="eyebrow">About</p>
   <h1>${esc(config.author.name)}</h1>
   <p class="lede">${esc(config.author.bio)}</p>

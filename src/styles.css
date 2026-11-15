@@ -160,16 +160,16 @@ a.avatar:hover img { transform: scale(1.06); }
 .avatar.lg { width: 160px; height: 160px; margin-bottom: 20px; }
 /* fake 3D: the disc turns slowly like a coin, its shadow shifts with it, and
    the drawing slides a little the other way so it seems to float above it */
-.avatar { animation: coin 7s ease-in-out infinite alternate; }
-.avatar img { animation: coin-art 7s ease-in-out infinite alternate; }
+.avatar { animation: coin 4.5s ease-in-out infinite alternate; }
+.avatar img { animation: coin-art 4.5s ease-in-out infinite alternate; }
 a.avatar:hover, a.avatar:hover img { animation-play-state: paused; }
 @keyframes coin {
-  from { transform: perspective(500px) rotateY(-16deg) rotateX(5deg); box-shadow: 7px 4px 0 var(--ink); }
-  to { transform: perspective(500px) rotateY(16deg) rotateX(-4deg); box-shadow: 1px 5px 0 var(--ink); }
+  from { transform: perspective(420px) rotateY(-30deg) rotateX(9deg); box-shadow: 10px 4px 0 var(--ink); }
+  to { transform: perspective(420px) rotateY(30deg) rotateX(-7deg); box-shadow: -3px 6px 0 var(--ink); }
 }
 @keyframes coin-art {
-  from { transform: translateX(3.5%) scale(1.05); }
-  to { transform: translateX(-3.5%) scale(1.05); }
+  from { transform: translateX(7%) scale(1.1); }
+  to { transform: translateX(-7%) scale(1.1); }
 }
 
 /* subscribe card */
