@@ -324,7 +324,7 @@ await page("/", layout({
     <h1 class="enter" style="--i:1"><span class="line">${config.headline.replace(" as an artist", "")}</span><br> <span class="nb">as an artist<span class="cursor" aria-hidden="true">_</span></span></h1>
     <p class="lede enter" style="--i:2">Character design, world building and careers in games, from the artist behind OlliOlli World's BAFTA-nominated art.</p>
     <p class="motto enter" style="--i:3">Stay creative, stay weird.</p>
-    ${mentorship ? `<p class="hero-cta enter" style="--i:4"><a class="btn btn-sm btn-ghost" href="${mentorship.url}" target="_blank" rel="noopener" data-gumroad>1-on-1 mentorship →</a></p>` : ""}
+    ${mentorship ? `<p class="hero-cta enter" style="--i:4"><a class="btn btn-sm btn-ghost" href="${mentorship.url}" target="_blank" rel="noopener" data-gumroad>Book a private 1-on-1 session →</a></p>` : ""}
   </div>
   <div class="hero-art enter" style="--i:2">${card(latest, "lg")}</div>
 </section>
