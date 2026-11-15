@@ -4,7 +4,7 @@ export default {
   tagline: "Stay creative, stay weird.",
   headline: "Find your voice as an artist",
   description:
-    "Art Discipline is a monthly newsletter by Germán Reina Carmona, the artist behind OlliOlli World's BAFTA-nominated art: character design, world building, creativity and careers in games.",
+    "Art Discipline is a monthly newsletter by Germán Reina, the artist behind OlliOlli World's BAFTA-nominated art: character design, world building, creativity and careers in games.",
   siteUrl: "https://artdiscipline.com",
 
   // Where the posts come from. The site rebuilds from this automatically.
@@ -16,8 +16,8 @@ export default {
   canonicalToSubstack: false,
 
   author: {
-    name: "Germán Reina Carmona",
-    bio: "Creative vision and art direction for video games and animation. Previously OlliOlli World (BAFTA-nominated art), Supercell, Rovio, Riot Games. Passionate about unique designs and world-building for new and existing IPs.",
+    name: "Germán Reina",
+    bio: "Creative vision and art direction for video games and animation. Currently creating art for Clash of Clans at Supercell. Previously OlliOlli World (BAFTA-nominated art), Rovio, Yuga Labs, Riot Games, and more. Passionate about unique designs and world-building for new and existing IPs.",
   },
 
   // "Start here" picks on the homepage (Substack slugs).

@@ -78,8 +78,8 @@ function cleanBody(html, slug, label = "") {
   let n = 0;
   const inline = () => `<div class="inline-sub"><p>Enjoying it? Get every issue by email.</p>${subscribeForm(`in-${slug}-${n++}`, "Subscribe")}</div>`;
   return html
-    // full name everywhere
-    .replace(/Germán Reina(?! Carmona)/g, config.author.name)
+    // one spelling of the name everywhere
+    .replace(/Germán Reina Carmona/g, config.author.name)
     .replace(/<div class="image-link-expand">[\s\S]*?<\/svg><\/button><\/div><\/div>/g, "")
     .replace(/<button[\s\S]*?<\/button>/g, "")
     // Substack's signed image links refuse other sites; use plain CDN resizes instead
@@ -435,7 +435,7 @@ await page("/shop/", layout({
 // ---------- about ----------
 await page("/about/", layout({
   title: `About ${config.author.name}, the artist behind Art Discipline`,
-  description: `${config.author.name} is an art director and character designer: OlliOlli World (BAFTA-nominated art), Supercell, Rovio and Riot Games. Art Discipline is his monthly newsletter.`,
+  description: `${config.author.name} is an art director and character designer, currently creating art for Clash of Clans at Supercell. Previously OlliOlli World (BAFTA-nominated art), Rovio and Riot Games.`,
   schema: pageSchema([{ "@type": "ProfilePage", url: config.siteUrl + "/about/", mainEntity: person }], ["About", "/about/"]),
   path: "/about/",
   body: `
