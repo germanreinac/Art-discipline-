@@ -435,7 +435,7 @@ await page("/shop/", layout({
 // ---------- about ----------
 await page("/about/", layout({
   title: `About ${config.author.name}, the artist behind Art Discipline`,
-  description: `${config.author.name} is an art director and character designer: OlliOlli World (BAFTA-nominated art), Supercell, Rovio and Riot Games. Art Discipline is his monthly newsletter.`,
+  description: `${config.author.name} is an art director and character designer, currently creating art for Clash of Clans at Supercell. Previously OlliOlli World (BAFTA-nominated art), Rovio and Riot Games.`,
   schema: pageSchema([{ "@type": "ProfilePage", url: config.siteUrl + "/about/", mainEntity: person }], ["About", "/about/"]),
   path: "/about/",
   body: `
