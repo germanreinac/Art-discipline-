@@ -4,7 +4,7 @@ export default {
   tagline: "Stay creative, stay weird.",
   headline: "Find your voice as an artist",
   description:
-    "Art Discipline is a monthly newsletter by Germán Reina, the artist behind OlliOlli World's BAFTA-nominated art: character design, world building, creativity and careers in games.",
+    "Art Discipline is a monthly newsletter by Germán Reina, the artist behind OlliOlli World (BAFTA-nominated): character design, world building, creativity and careers in games.",
   siteUrl: "https://artdiscipline.com",
 
   // Where the posts come from. The site rebuilds from this automatically.
