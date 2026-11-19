@@ -17,7 +17,7 @@ export default {
 
   author: {
     name: "Germán Reina",
-    bio: "Creative vision and art direction for video games and animation. Currently creating art for Clash of Clans at Supercell. Previously OlliOlli World (BAFTA-nominated art), Rovio, Yuga Labs, Riot Games, and more. Passionate about unique designs and world-building for new and existing IPs.",
+    bio: "Creative vision and art direction for video games and animation. Currently creating art for Clash of Clans at Supercell. Previously OlliOlli World (BAFTA-nominated), Rovio, Yuga Labs, Riot Games, and more. Passionate about unique designs and world-building for new and existing IPs.",
   },
 
   // "Start here" picks on the homepage (Substack slugs).
