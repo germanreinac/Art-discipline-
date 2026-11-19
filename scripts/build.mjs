@@ -447,7 +447,7 @@ await page("/about/", layout({
   <p class="eyebrow">About</p>
   <h1>${esc(config.author.name)}</h1>
   <p class="lede">${esc(config.author.bio)}</p>
-  <p>Art Discipline is my independently-run newsletter. Once a month I share what I'm learning about character design, world building, careers in games and staying creative, plus the side projects I'm building, like Megalith Islands.</p>
+  <p>Art Discipline is my independently-run newsletter. Once a month I share what I'm learning about making art for games, tips for your creative journey and insights on projects I'm building.</p>
 </section>
 <section class="wrap-narrow">
   <ul class="link-list">${config.links.map((l) => `<li><a href="${l.url}" target="_blank" rel="noopener"><strong>${esc(l.label)}</strong><span>${esc(l.note)}</span></a></li>`).join("")}</ul>
