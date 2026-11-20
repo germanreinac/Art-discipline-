@@ -283,11 +283,10 @@ const postSchema = (p) => ({
 });
 const pageSchema = (extra, ...trail) => ({ "@context": "https://schema.org", "@graph": [org, ...extra, crumbs(["Art Discipline", "/"], ...trail)] });
 
-// Profile picture on a gradient, linking to Instagram
+// Profile picture (public/skull.png, transparent background) on a lavender
+// disc, linking to Instagram
 function avatar(size, cls = "") {
-  const photo = posts[0].authorPhoto;
-  if (!photo) return "";
-  const pic = `<img src="${img(photo, size)}" alt="${esc(config.author.name)}">`;
+  const pic = `<img src="/skull.png" width="640" height="640" alt="${esc(config.author.name)}">`;
   return config.instagram
     ? `<a class="avatar ${cls}" href="${config.instagram}" target="_blank" rel="noopener" title="${esc(config.author.name)} on Instagram">${pic}</a>`
     : `<span class="avatar ${cls}">${pic}</span>`;
